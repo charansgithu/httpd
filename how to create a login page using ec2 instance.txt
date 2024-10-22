@@ -1,0 +1,67 @@
+# how to create a login page using ec2 instance with the help of http servers
+
+
+1: create ur ec2 instance you can select either Linux or ubuntu 
+
+2:allow https(22) and ssh (80) should be allowed 
+
+3:launch your instance and connect it to ur local vms 
+
+4: now give the commands below to install httpd to your local server 
+	* sudo yum update -y
+	* sudo yum install -y httpd
+	* sudo systemctl start httpd
+	* sudo systemctl enable httpd  
+5: upload your html file on your httpd server , you need to upload and write file to the default document
+ 
+	root directory /var/www/html/.
+
+6: or you can create an html file on the local machine 
+
+	sudo nano /var/www/html/index.html
+
+7: paste your html content ,for example
+
+	<!DOCTYPE html>
+<html>
+<head>
+    <title>My AWS Website</title>
+</head>
+<body>
+    <h1>Welcome to My Website on AWS EC2</h1>
+    <p>This is a simple HTML page served by Apache on an EC2 instance.</p>
+</body>
+</html>
+
+
+8:if your using your local machine ,use the following command
+
+	scp -i <path-to-your-pem-file>.pem <path-to-your-html-file>.html ec2-user@<your-ec2-public-ip>:/var/www/html/
+
+	ex:
+		scp -i my-key.pem my-website.html ec2-user@54.123.45.67:/var/www/html/
+
+9:you have to ensure the permissions to be served by httpd
+
+	sudo chmod 644 /var/www/html/index.html
+
+10:You also want to make sure the /var/www/html/ directory has the correct ownership and permissions:
+	
+	sudo chown -R ec2-user:ec2-user /var/www/html
+	sudo chmod -R 755 /var/www/html
+11:If you named the file something else, you can access it directly like this:
+
+	http://<your-ec2-public-ip>/<your-html-file>.html
+12: check whether the httpd is running or not ,check the status 
+
+	sudo systemctl status httpd
+13:By following these steps, your HTML file should be accessible via a browser through the public IP of your EC2 instance.
+
+
+
+			thank you 
+
+
+
+
+  
